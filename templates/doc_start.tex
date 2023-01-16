@@ -1,0 +1,44 @@
+\documentclass[a4paper,11pt,german]{report} 
+% ------------------------ Installiere Pakete ------------------------ %
+\usepackage{geometry} % Packet für Seitenrandabständex und Einstellung für Seitenränder
+\usepackage[german]{babel} % deutsche Silbentrennung
+\usepackage[utf8]{inputenc} % UTF-8 Encoding
+\usepackage[T1]{fontenc} % Zeichenencoding
+
+\usepackage{lmodern} % bessere typographische Qualität
+ 
+\usepackage{fix-cm}
+
+\usepackage{setspace}
+
+\usepackage[placement=top,
+angle=0,
+color=black,
+scale=1,
+vshift=1pt
+]{background}
+  
+\usepackage{fancyhdr}
+
+% ------------------------ Layouting ------------------------ %
+\geometry{left=4.5cm, right=2cm, top=2.5cm, bottom=2.5cm,heightrounded}
+\linespread {1.25}\selectfont %1.25 da er von Haus aus 1.2 ist und 1,25 * 1,2 = 1,5 isch
+\setlength{\parindent}{0em} % im Deutschen Einrückung nicht üblich, leider
+\setlength{\parskip}{1.2ex} % Abstand zum nächsten Absatz; evtl. KOMA verwenden?
+
+
+% ------------------------ Header ------------------------ %
+\pagestyle{fancy}
+\newcommand{\phv}{\fontfamily{phv}\fontseries{m}\fontsize{9}{11}\selectfont}
+\addtolength{\headheight}{10pt} % damit man zwei Zeilen gut unterbringt
+\fancyhf{} % ClearFooter and Header
+\renewcommand{\sectionmark}[1]{\markboth{foo}{}}
+\fancyhead[C]{\small\selectfont\nouppercase \leftmark} % No uppercase and smaller fontsize
+\fancyfoot[C]{\thepage} 
+%\renewcommand{\sectionmark}[1]{\markright{\thesection~- ~#1}}
+%\fancyhf{} % ClearFooter and Header
+%\fancyhead[LO,LE]{\small\selectfont\nouppercase\leftmark} % No uppercase and smaller fontsize
+
+% ##------##------##- Dokumentanfang -##------##------##------##------##-  %
+\begin{document}
+

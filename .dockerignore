@@ -1,0 +1,7 @@
+*
+
+!src
+!templates
+!pnpm-lock.yaml
+!package.*
+!tsconfig.*
