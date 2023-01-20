@@ -4,17 +4,15 @@ This is a simple single-endpoint-server that generates PDFs from $\LaTeX$ source
 
 ## Usage
 
-POST your $\LaTeX$ source code to the server (endpoint `/`) and it will return a PDF.
+POST your $\LaTeX$ source code to the server (endpoint `/`) as `form-data` a and it will return a PDF.
 
 ## Setup
 
-Posted content is enclosed in a LaTex document template.  
-The Template is split into two parts: the pre-section and post-section.
+Posted content is included in a LaTex document template.  
+Your `form-data` MUST include a `main.tex` file.
 
-Supply your template parts as files, located in `templates/doc_start.tex`
-and `templates/doc_end.tex` respectively.  
-This can be achieved by either mounting a volume to the container or building a new image.  
-If you dont want to use a template, just leave the files empty.
+Supply your assets as files, located in [`./assets`](./assets) (e.g. images, fonts, etc.).
+This can be achieved by either mounting a volume to the container or building a new image.
 
 Configure the port of the server by setting the environment variable `PORT` (default port is 3000).
 

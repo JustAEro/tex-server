@@ -1,8 +1,13 @@
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
+import { join } from 'path';
+import { Stream } from 'stream';
 import { getPdf } from 'test/util';
 
 const sampleDir = __dirname + '/../samples';
-const files = readdirSync(sampleDir).filter(s => s.endsWith('.tex')); // analyze all .tex files in the samples directory
+const samples = readdirSync(sampleDir).map(x => join(sampleDir, x));
+
+const specFilename = '_spec.pdf'; // the reference file
+const resultFilename = '_spec.result.pdf'; // the result file received from the server
 
 // ignore file unique metadata
 const ignorePdfDiffRegexs = [
@@ -12,19 +17,24 @@ const ignorePdfDiffRegexs = [
 ];
 
 describe('samples', () => {
-	test.each(files)('should compile %s', async texFile => {
-		const pdfFile = texFile.replace(/.tex$/, '.pdf');
+	test.each(samples)('should compile %s', async dir => {
+		const files = readdirSync(dir)
+			.filter(x => !x.startsWith('_')) // remove result files
+			.reduce((prev, f) => {
+				return {
+					...prev,
+					[f]: readFileSync(join(dir, f)),
+				};
+			}, {} as Record<string, Stream>);
 
-		const texData = readFileSync(sampleDir + '/' + texFile, 'utf8');
-
-		const received = await getPdf(texData);
+		const received = await getPdf(files);
 		expect(received).toBeTruthy();
 
 		// write the recieved result to a file
-		writeFileSync(sampleDir + '/' + pdfFile.replace(/.pdf$/, '.result.pdf'), received);
+		writeFileSync(join(dir, resultFilename), received);
 
 		// compare reference buffer with result buffer
-		const diffAgainst: Buffer = readFileSync(sampleDir + '/' + pdfFile);
+		const diffAgainst: Buffer = readFileSync(join(dir, specFilename));
 
 		// apply ignore regexs
 		const [receivedN, diffAgainstN] = [received, diffAgainst]

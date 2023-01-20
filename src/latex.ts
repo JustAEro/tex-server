@@ -1,6 +1,6 @@
 import { ProcessEnvOptions, spawn } from 'child_process';
-import { createReadStream, mkdirSync, readFileSync, rmSync } from 'fs';
-import { delimiter } from 'path';
+import { createReadStream, readFileSync, statSync } from 'fs';
+import { delimiter, join } from 'path';
 import { Stream } from 'stream';
 
 export interface LatexAssetOptions {
@@ -46,17 +46,10 @@ const joinPaths = (inputs: string | string[]) =>
 	(Array.isArray(inputs) ? inputs.join(delimiter) : inputs) + delimiter;
 
 export class Latex {
-	// job id
-	private readonly cwd = '/tmp/pdftex/' + this.jobId;
-
 	// pdflatex process options
 	private readonly options: LatexOptions;
 
-	constructor(
-		private readonly jobId: string,
-		private readonly src: Stream,
-		opts: LatexAssetOptions = {},
-	) {
+	constructor(private readonly cwd: string, opts: LatexAssetOptions = {}) {
 		// initialize the options
 		this.options = {
 			...opts,
@@ -72,22 +65,25 @@ export class Latex {
 	}
 
 	public async compile(): Promise<Stream> {
-		// create the working directory
-		mkdirSync(this.cwd, { recursive: true });
-
 		// create the pdflatex process and setup the pipes
-		const pdflatex = spawn('/usr/bin/pdflatex', this.options.args, this.options);
-		this.src.pipe(pdflatex.stdin);
+		const pdflatex = spawn(
+			'/usr/bin/pdflatex',
+			[...this.options.args, join(__dirname, '..', 'assets', 'doc.tex')],
+			this.options,
+		);
 
 		return new Promise<void>((resolve, reject) => {
 			pdflatex.on('exit', code => {
 				// resolve on success
-				if (code === 0) return resolve();
+				if (code === 0) {
+					const fileSize = statSync(this.cwd + '/document.pdf').size;
+					if (fileSize > 0) return resolve();
+				}
 				// else read log and detect error
 				const err = outputAfterLastPrompt(this.cwd + '/document.log');
 				reject(
 					new Error(`
-						pdflatex exited with code ${code} (job id: ${this.jobId})
+						pdflatex exited with code ${code} (job id: ${this.cwd.split('/').pop()})
 						
 						## LaTeX error log ##
 						${err}
@@ -97,10 +93,6 @@ export class Latex {
 			pdflatex.on('error', reject);
 			pdflatex.on('close', reject);
 			pdflatex.on('disconnect', reject);
-		}).then(() =>
-			createReadStream(this.cwd + '/document.pdf').on('close', () =>
-				rmSync(this.cwd, { recursive: true }),
-			),
-		);
+		}).then(() => createReadStream(this.cwd + '/document.pdf'));
 	}
 }

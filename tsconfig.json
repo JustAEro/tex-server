@@ -1,4 +1,5 @@
 {
+	"ts-node": { "files": true },
 	"compilerOptions": {
 		"module": "CommonJS",
 		"declaration": true,
@@ -17,6 +18,6 @@
 		"noImplicitAny": true,
 		"strictBindCallApply": false,
 		"forceConsistentCasingInFileNames": true,
-		"noFallthroughCasesInSwitch": false,
+		"noFallthroughCasesInSwitch": false
 	}
 }

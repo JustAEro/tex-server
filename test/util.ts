@@ -1,5 +1,7 @@
 import { exec } from 'child_process';
+import { Stream } from 'stream';
 import axios from 'axios';
+import * as FormData from 'form-data';
 import { options } from './setup';
 
 const clearLastLine = () => {
@@ -32,11 +34,23 @@ export const sh = async (cmd: string, taskDesc: string) =>
 		return r;
 	});
 
-export const getPdf = async (data: string, path = '/'): Promise<Buffer> => {
+export const getPdf = async (
+	data: string | Record<string, Buffer | Stream>,
+	path = '/',
+): Promise<Buffer> => {
 	const opts = options();
+
+	const f = new FormData();
+	if (typeof data === 'string') f.append('main.tex', Buffer.from(data), { filename: 'main.tex' });
+	else for (const [k, v] of Object.entries(data)) f.append(k, v, { filename: k });
+
 	const result = await axios
-		.post(`http://localhost:${opts.port}` + path, data, {
+		.post(`http://localhost:${opts.port}` + path, f, {
 			responseType: 'arraybuffer',
+		})
+		.catch(e => {
+			console.log(e.response);
+			throw e;
 		})
 		.then(response => Buffer.from(response.data, 'binary'));
 	return result;

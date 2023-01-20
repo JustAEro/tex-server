@@ -39,7 +39,7 @@ USER $USER
 WORKDIR $HOME
 
 COPY --from=build-env /app/dist         ./dist 
-COPY --from=build-env /app/templates    ./templates
+COPY --from=build-env /app/assets       ./assets
 COPY --from=base      /app/node_modules ./node_modules
 
 ENTRYPOINT ["/usr/bin/node"]
