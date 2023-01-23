@@ -38,9 +38,9 @@ RUN apk update && \
 USER $USER
 WORKDIR $HOME
 
-COPY --from=build-env /app/dist         ./dist 
-COPY --from=build-env /app/assets       ./assets
-COPY --from=base      /app/node_modules ./node_modules
+COPY --chown=$USER --from=build-env /app/dist         ./dist 
+COPY --chown=$USER --from=build-env /app/assets       ./assets
+COPY --chown=$USER --from=base      /app/node_modules ./node_modules
 
 ENTRYPOINT ["/usr/bin/node"]
 CMD ["dist/main.js"]
