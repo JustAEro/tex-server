@@ -34,13 +34,13 @@ RUN apk update && \
 USER $USER
 WORKDIR $HOME
 
-COPY --from=build-env /app/dist         			./dist 
-COPY --from=build-env /app/assets       			./assets
-COPY --from=base      /app/node_modules 			./node_modules
-COPY --from=build-env /app/assets/roboto.ttf       	./.fonts/roboto.ttf
+COPY --chown=$USER --from=build-env /app/dist         ./dist 
+COPY --chown=$USER --from=build-env /app/assets       ./assets
+COPY --chown=$USER --from=base      /app/node_modules ./node_modules
 
-# Rebuild fontchache
-RUN fc-cache -fv
+# place fonts & Rebuild fontchache
+RUN mv ./assets/fonts ./.fonts && \
+  fc-cache -fv
 
 ENTRYPOINT ["/usr/bin/node"]
 CMD ["dist/main.js"]

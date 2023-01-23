@@ -4,6 +4,8 @@ import { Request } from 'express';
 import { StorageEngine } from 'multer';
 
 export class PerRequestStorage implements StorageEngine {
+	public readonly dir = '/tmp/pdflatex/';
+
 	_handleFile(
 		req: Request,
 		file: Express.Multer.File,

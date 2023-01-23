@@ -7,9 +7,9 @@ import { Latex } from './latex';
 import { log, PdfError } from './logger';
 import { PerRequestStorage } from './storageEngine';
 
-const tmpDir = '/tmp/pdftex/';
-mkdirSync(tmpDir, { recursive: true });
-const upload = multer({ storage: new PerRequestStorage() });
+const storage = new PerRequestStorage();
+mkdirSync(storage.dir, { recursive: true });
+const upload = multer({ storage });
 
 // init
 const app = express();
@@ -17,7 +17,7 @@ const app = express();
 app.use((req, _res, next) => {
 	// add metadata to request
 	req.id = v4();
-	req.workdir = join(tmpDir, req.id);
+	req.workdir = join(storage.dir, req.id);
 	req.workdirClear = () => rmSync(req.workdir, { recursive: true });
 	req.timestamp = Date.now();
 
