@@ -1,4 +1,3 @@
-require('ts-node/register');
 import { options } from './setup';
 import { sh } from './util';
 
