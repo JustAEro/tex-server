@@ -31,39 +31,56 @@
 \pagestyle{fancy}
 \pagenumbering{arabic}
 \renewcommand{\headrulewidth}{0pt}
-
+% Used for the Tables in the footer
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 
-\fancyfoot{
-\begin{tabularx}{\textwidth}[b]{|RR|RR|}
-\hline
-\includegraphics[height=1cm,width=3cm,keepaspectratio]{/home/node/assets/icon.png} & Name &  \includegraphics[height=1cm,width=3cm,keepaspectratio]{/home/node/assets/icon.png} & Name\\
-\hline
-\includegraphics[height=1cm,width=3cm,keepaspectratio]{/home/node/assets/icon.png} & Name &  \includegraphics[height=1cm,width=3cm,keepaspectratio]{/home/node/assets/icon.png} & Name\\
-\hline
-\includegraphics[height=1cm,width=3cm,keepaspectratio]{/home/node/assets/icon.png} & Name &  \includegraphics[height=1cm,width=3cm,keepaspectratio]{/home/node/assets/icon.png} & Name\\
-\hline
-\multicolumn{4}{r}{Page \thepage}
-\end{tabularx}
+% Header command
+\newcommand{\reportheader}[5]{
+	\fancyhead{
+	\begin{center}
+	\begin{tabularx}{\textwidth}{XX}
+	\Large\textbf{#1}&\multicolumn{1}{l}{\hfill\includegraphics[height=1cm]{/home/node/assets/icon.png}} \\
+	\multicolumn{2}{l}{\LARGE\textbf{#2}}\\
+	\normalsize Surname, Name & #3\\
+	Department & #4 \\
+	Report & #5\\
+	\end{tabularx}
+	\hrule
+	\end{center}
+	}
 }
 
-\fancyhead{
-\begin{center}
-\begin{tabularx}{\textwidth}{XX}
-\Large\textbf{Company Text}&\multicolumn{1}{l}{\hfill\includegraphics[height=1cm]{/home/node/assets/icon.png}} \\
-\multicolumn{2}{l}{\LARGE\textbf{Page Header: }}\\
-\normalsize Surname, Name & Doe, John\\
-Department & Shipping and Sales \\
-Report & Mo 01.01.2023\\
-\end{tabularx}
-\hrule
-\end{center}
+% footer command, for single line footer
+\newcommand{\singlelinefooter}[4]{
+    \fancyfoot{
+    \begin{tabularx}{\textwidth}[b]{|RR|RR|}
+    \hline
+    \includegraphics[height=1cm,width=3cm,keepaspectratio]{#1} & #2 &  \includegraphics[height=1cm,width=3cm,keepaspectratio]{#3} & #4\\
+    \hline
+    \multicolumn{4}{r}{Page \thepage}
+    \end{tabularx}
+    }
 }
+% footer command, for double line footer
+\newcommand{\doublelinefooter}[8]{
+    \fancyfoot{
+    \begin{tabularx}{\textwidth}[b]{|RR|RR|}
+    \hline
+    \includegraphics[height=1cm,width=3cm,keepaspectratio]{#1} & #2 &  \includegraphics[height=1cm,width=3cm,keepaspectratio]{#3} & #4\\
+    \hline
+    \includegraphics[height=1cm,width=3cm,keepaspectratio]{#5} & #6 &  \includegraphics[height=1cm,width=3cm,keepaspectratio]{#7} & #8\\
+    \hline
+    \multicolumn{4}{r}{Page \thepage}
+    \end{tabularx}
+    }
+}
+
+% footer command, for tripple line footer
+% comming soon
 
 
 % ##------##------##- Dokumentanfang -##------##------##------##------##-  %
 \begin{document}
-
 
 \include{main}
 \end{document}
