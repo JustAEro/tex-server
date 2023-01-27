@@ -52,7 +52,7 @@ app.post('/', upload.any(), async (req: express.Request, res, next) => {
 				.on('end', () => {
 					if (empty) return next(new PdfError('Empty PDF', req));
 					log('log', 'success', { jobId: req.id, duration: Date.now() - req.timestamp });
-					req.workdirClear();
+					//req.workdirClear();
 					res.end();
 				})
 				.pipe(res);

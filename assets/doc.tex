@@ -1,48 +1,90 @@
-\documentclass[a4paper,11pt,german]{report} 
+\documentclass[a4paper,11pt]{report} 
 % ------------------------ Installiere Pakete ------------------------ %
 \usepackage{geometry} % Packet für Seitenrandabständex und Einstellung für Seitenränder
 \usepackage[german]{babel} % deutsche Silbentrennung
-\usepackage[utf8]{inputenc} % UTF-8 Encoding
-\usepackage[T1]{fontenc} % Zeichenencoding
 
 \usepackage{lmodern} % bessere typographische Qualität
- 
+
 \usepackage{fix-cm}
 
-\usepackage{setspace}
+\usepackage{xcolor}
 
-\usepackage[placement=top,
-angle=0,
-color=black,
-scale=1,
-vshift=1pt
-]{background}
-  
+\usepackage{graphicx}
+
+\usepackage{fontspec} 
+% Needs font to be installed on the system (with font-cache)
+\setmainfont{Roboto}
+
+\usepackage{lipsum}
 \usepackage{fancyhdr}
+\usepackage{tabularx} 
 
+
+\def\arraystretch{1.25}
+ 
 % ------------------------ Layouting ------------------------ %
-\geometry{left=4.5cm, right=2cm, top=2.5cm, bottom=2.5cm,heightrounded}
-\linespread {1.25}\selectfont %1.25 da er von Haus aus 1.2 ist und 1,25 * 1,2 = 1,5 isch
+\geometry{left=1cm, right=1cm, headheight=4.5cm, headsep=0cm, top=5.2cm, bottom=5cm, footskip=4.5cm}
+\linespread{1.5}\selectfont 
 \setlength{\parindent}{0em} % im Deutschen Einrückung nicht üblich, leider
-\setlength{\parskip}{1.2ex} % Abstand zum nächsten Absatz; evtl. KOMA verwenden?
+\setlength{\parskip}{1.8ex} % Abstand zum nächsten Absatz
 
 
-% ------------------------ Header ------------------------ %
+
+% ------------------------ Header + Footer ------------------------ %
 \pagestyle{fancy}
-\newcommand{\phv}{\fontfamily{phv}\fontseries{m}\fontsize{9}{11}\selectfont}
-\addtolength{\headheight}{10pt} % damit man zwei Zeilen gut unterbringt
-\fancyhf{} % ClearFooter and Header
-\renewcommand{\sectionmark}[1]{\markboth{foo}{}}
-\fancyhead[C]{\small\selectfont\nouppercase \leftmark} % No uppercase and smaller fontsize
-\fancyfoot[C]{\thepage} 
-%\renewcommand{\sectionmark}[1]{\markright{\thesection~- ~#1}}
-%\fancyhf{} % ClearFooter and Header
-%\fancyhead[LO,LE]{\small\selectfont\nouppercase\leftmark} % No uppercase and smaller fontsize
+\pagenumbering{arabic}
+\renewcommand{\headrulewidth}{0pt}
+% Used for the Tables in the footer
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+
+% Header command
+\newcommand{\reportheader}[5]{
+	\fancyhead{
+	\begin{center}
+	\begin{tabularx}{\textwidth}{XX}
+	\Large\textbf{#1}&\multicolumn{1}{l}{\hfill\includegraphics[height=1cm]{/home/node/assets/icon.png}} \\
+	\multicolumn{2}{l}{\LARGE\textbf{#2}}\\
+	\normalsize Surname, Name & #3\\
+	Department & #4 \\
+	Report & #5\\
+	\end{tabularx}
+	\hrule
+	\end{center}
+	}
+}
+
+% footer command, for single line footer
+\newcommand{\singlelinefooter}[4]{
+    \fancyfoot{
+    \begin{tabularx}{\textwidth}[b]{|RR|RR|}
+    \hline
+    \includegraphics[height=1cm,width=3cm,keepaspectratio]{#1} & #2 &  \includegraphics[height=1cm,width=3cm,keepaspectratio]{#3} & #4\\
+    \hline
+    \multicolumn{4}{r}{Page \thepage}
+    \end{tabularx}
+    }
+}
+% footer command, for double line footer
+\newcommand{\doublelinefooter}[8]{
+    \fancyfoot{
+    \begin{tabularx}{\textwidth}[b]{|RR|RR|}
+    \hline
+    \includegraphics[height=1cm,width=3cm,keepaspectratio]{#1} & #2 &  \includegraphics[height=1cm,width=3cm,keepaspectratio]{#3} & #4\\
+    \hline
+    \includegraphics[height=1cm,width=3cm,keepaspectratio]{#5} & #6 &  \includegraphics[height=1cm,width=3cm,keepaspectratio]{#7} & #8\\
+    \hline
+    \multicolumn{4}{r}{Page \thepage}
+    \end{tabularx}
+    }
+}
+
+% footer command, for tripple line footer
+% comming soon
+
 
 % ##------##------##- Dokumentanfang -##------##------##------##------##-  %
 \begin{document}
 
 \include{main}
-
 \end{document}
 

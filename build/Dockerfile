@@ -17,10 +17,6 @@ COPY . .
 
 RUN pnpm build
 
-# == PDFTEX ==
-FROM ubuntu:bionic AS pdflatex-env
-RUN apt update && apt install texlive-latex-base -y
-
 # == PROD ==
 FROM alpine:3.17.1
 
@@ -32,7 +28,7 @@ RUN adduser -D $USER
 RUN apk update && \
     apk add --no-cache \
     texmf-dist-latexextra \
-    texlive \
+    texlive-xetex \
     nodejs
 
 USER $USER
@@ -41,6 +37,10 @@ WORKDIR $HOME
 COPY --chown=$USER --from=build-env /app/dist         ./dist 
 COPY --chown=$USER --from=build-env /app/assets       ./assets
 COPY --chown=$USER --from=base      /app/node_modules ./node_modules
+
+# place fonts & Rebuild fontchache
+RUN mv ./assets/fonts ./.fonts && \
+  fc-cache -fv
 
 ENTRYPOINT ["/usr/bin/node"]
 CMD ["dist/main.js"]

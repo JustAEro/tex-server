@@ -67,7 +67,7 @@ export class Latex {
 	public async compile(): Promise<Stream> {
 		// create the pdflatex process and setup the pipes
 		const pdflatex = spawn(
-			'/usr/bin/pdflatex',
+			'/usr/bin/xelatex',
 			[...this.options.args, join(__dirname, '..', 'assets', 'doc.tex')],
 			this.options,
 		);
