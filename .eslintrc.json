@@ -28,6 +28,12 @@
 				"pathGroups": [{ "pattern": "src/**", "group": "parent" }],
 				"pathGroupsExcludedImportTypes": ["builtin"]
 			}
+		],
+		"prettier/prettier": [
+			"error",
+			{
+				"endOfLine": "auto"
+			}
 		]
 	}
 }
